@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HTML Tutorial</title>
+<!-- CSS only -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+  <style type="text/css">
+/*==========================================================================================================
+    Custom Confirm box
+ ====================================================================================================*/
+
+.c-confirm-area {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    z-index: 999999;
+    background-color: rgba(0, 0, 0, 0.50);
+    animation-name: confirm---open;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    display:flex;
+    align-items:center;
+}
+
+.c-confirm-box {
+    width: 400px;
+    height: 240px;
+    background-color: #fff;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.20);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 100px auto;
+    padding: 20px;
+    position: relative;
+    opacity: 0;
+    transform: scale(0.75);
+    animation-name: confirm__window---open;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
+    animation-delay: 0.2s;
+}
+.confirm__close {
+    animation-name: confirm---close;
+}
+.c-confirm-title {
+    text-align: center;
+}
+
+.c-confirm-icon {
+    width: 50px;
+    height: 50px;
+    border: 1px solid green;
+    border-radius: 50%;
+    text-align: center;
+    padding: 3px;
+    font-size: 26px;
+    margin: 0px auto;
+    color: red;
+}
+
+.c-confirm-description {
+    font-size: 14px;
+    text-align: center;
+    color: black;
+    font-family: inherit;
+}
+
+.c-confirm-controlls {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+}
+
+@keyframes confirm---open {
+    from {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes confirm---close {
+    from {
+        opacity: 1
+    }
+
+    to {
+        opacity: 0
+    }
+}
+
+@keyframes confirm__window---open {
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+</style>
+</head>
+
+<body>
+
+  <button id="confirmbtn" clas="btn btn-sm btn-info">check</button>
+
+  
+<script  src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+  integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+  crossorigin="anonymous"></script>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script>
+const Confirm = {
+    open(options) {
+        options = Object.assign({}, {
+            title: 'Are you Sure?',
+            message: 'if you sure click "Confirm" else click "Cancel"',
+            okText: 'Confirm',
+            cancelText: 'Cancel',
+            onok: function () { },
+            oncancel: function () { }
+        }, options);
+
+        const html = `
+    <div class="c-confirm-area">
+        <div class="c-confirm-box">
+            <div class="c-confirm-icon">
+                <i class="fa fa-question"></i>
+            </div>
+            <div class="c-confirm-title">
+                <h4>${options.title}</h4>
+            </div>
+
+            <div class="c-confirm-description">
+                ${options.message}
+            </div>
+            <div class="c-confirm-controlls">
+                <button class="btn btn-sm btn-danger" id="c-confirm-cancel"> <i class="fa fa-close"></i> ${options.cancelText}</button>
+                <button class="btn btn-sm btn-success" id="c-confirm-confirm"><i class="fa fa-check"></i> ${options.okText}</button>
+            </div>
+        </div>
+    </div> `;
+
+        const template = document.createElement('template');
+        template.innerHTML = html;
+
+        // Identifier
+        const confirm_box_area = template.content.querySelector('.c-confirm-area');
+        const confirmButton = template.content.querySelector('#c-confirm-confirm');
+        const cancelButton = template.content.querySelector('#c-confirm-cancel');
+
+        confirm_box_area.addEventListener('click', e => {
+            if (e.target === confirm_box_area) {
+                options.oncancel();
+                this._close(confirm_box_area);
+            }
+        });
+
+        confirmButton.addEventListener('click', () => {
+            options.onok();
+            this._close(confirm_box_area);
+        });
+
+        cancelButton.addEventListener('click', () => {
+            options.oncancel();
+            this._close(confirm_box_area);
+        });
+
+
+        document.body.appendChild(template.content);
+    },
+
+    _close(confirmEl) {
+        confirmEl.classList.add('confirm__close');
+
+        confirmEl.addEventListener('animationend', () => {
+            document.body.removeChild(confirmEl);
+        });
+    }
+};
+
+
+
+
+  $("#confirmbtn").click(function(){
+    Confirm.open({
+    onok:function(){
+alert("ok");
+}
+    });
+  });
+  </script>.
+
+
+</body>
+</html>
